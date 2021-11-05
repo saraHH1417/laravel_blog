@@ -8,14 +8,17 @@ use Tests\TestCase;
 
 class HomeTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
      * @return void
      */
-   public function test_example()
+   public function testHomePage()
    {
-       $response = $this->get('/');
+       $this->actingAs($this->user());
+       $response = $this->get('/home');
+       $response->assertSeeText('You are logged in!');
      $response->assertStatus(200);
     }
 }

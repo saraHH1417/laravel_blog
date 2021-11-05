@@ -15,7 +15,10 @@ use App\Http\Controllers\HomeController;
 */
 Route::get('/' , [PostController::class, 'index'])->name('index');
 Route::get('/home' , [HomeController::class, 'index'])->name('profile');
-Route::view('/contact' , [HomeController::class, 'contact'])->name('contact');
+Route::get('/contact' , [HomeController::class, 'contact'])->name('contact');
+Route::get('/secret' ,[HomeController::class , 'secret'])
+            ->name('secret')
+            ->middleware('can:home.secret');
 //Route::resource('/posts' , 'App\Http\Controllers\PostController')->only(
 //                ['index', 'show' ,'create', 'store' , 'edit' , 'update']);
 Route::resource('/posts' , 'App\Http\Controllers\PostController');

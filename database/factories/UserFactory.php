@@ -31,6 +31,22 @@ class UserFactory extends Factory
         ];
     }
 
+    public function saraName()
+    {
+        return $this->state([
+            'name' => 'sara',
+            'email' => 'sara@example.com',
+            'is_admin' => true
+        ]);
+    }
+
+    public function adminUser()
+    {
+        return $this->state([
+            'is_admin' => true
+        ]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      *

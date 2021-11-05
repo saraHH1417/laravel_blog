@@ -40,9 +40,6 @@
                             <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('posts.index') }}">Blog posts</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('posts.create') }}">Add blog post</a>
                         </li>
                     </ul>
@@ -71,7 +68,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
@@ -88,9 +85,9 @@
 
         <main class="container py-4">
             @if(session()->has('success'))
-                <p style="color:green">
+                <div class="alert alert-success">
                     {{ session()->get('success') }}
-                </p>
+                </div>
             @endif
             @yield('content')
         </main>

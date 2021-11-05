@@ -7,7 +7,7 @@
     <label for="content">Content</label>
     <textarea name="content" id="content" cols="30" rows="10" class="form-control">{{ old('content' , $post->content ?? null) }}</textarea>
 </div>
-<button type="submit" class="btn btn-primary btn-block">Create</button>
+
 
 @if($errors->any())
     <ul>

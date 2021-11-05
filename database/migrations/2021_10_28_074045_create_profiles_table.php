@@ -31,6 +31,5 @@ class CreateProfilesTable extends Migration
     {
         Schema::dropIfExists('profiles');
 
-        Schema::dropColumns('author_id');
     }
 }
