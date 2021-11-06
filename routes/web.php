@@ -26,3 +26,6 @@ Route::resource('/posts' , 'App\Http\Controllers\PostController');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('posts/tag/{tagId}' , [\App\Http\Controllers\PostTagController::class , 'index'])->name('posts.tag.index');
+Route::resource('posts.comments' , \App\Http\Controllers\PostCommentController::class)->only(['store']);

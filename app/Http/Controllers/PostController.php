@@ -39,32 +39,16 @@ class PostController extends Controller
 //        DB::connection()->enableQueryLog();
 //        $posts = BlogPost::with('comments')->get();
 //        foreach($posts as $post) {
-//            foreach ($post->comments as $comment){
+//            foreach ($post->commepnts as $comment){
 //                echo $comment->content;
 //            }
 //        }
 //        dd(DB::getQueryLog());
 
-        $mostCommented = Cache::tags(['blog-posts'])->remember('blog-post-most-commented' , now()->addSeconds(10) ,
-            function (){
-            return BlogPost::mostCommented()->take(5)->get();
-        });
 
-        $mostActiveUsers = Cache::remember('users-most-active' , now()->addSeconds(10) ,
-            function (){
-            return User::withMostBlogPosts()->take(5)->get();
-        });
-
-        $mostActiveUsersInLastMonth = Cache::remember('users-most-active-last-month', now()->addSeconds(10),
-            function (){
-            return User::withMostBlogPostsInLastMonth()->take(5)->get();
-        });
 
         return view('posts.index' , [
-            'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
-            'mostCommented' => $mostCommented,
-            'mostActiveUsers' => $mostActiveUsers,
-            'mostActiveUsersInLastMonth' => $mostActiveUsersInLastMonth
+            'posts' => BlogPost::latestWithRelations()->get()
         ]);
 
     }
@@ -111,7 +95,7 @@ class PostController extends Controller
 
         // the default scale for time is minutes.
         $blogPost = Cache::tags(['blog-posts'])->remember("blog-post-{$id}" , 60 , function () use($id){
-            return BlogPost::with('comments')->findOrFail($id);
+            return BlogPost::with('comments' , 'tags' , 'user' , 'comments.user')->findOrFail($id);
         });
 
         $sessionId = session()->getId();

@@ -25,7 +25,7 @@ class StorePost extends FormRequest
     {
         return [
             // bail will stop validation if one of rules doesn't comply
-            'title' => 'bail|required|max:100|min:3',
+            'title' => 'bail|required|max:100|min:5',
             'content' => 'required|min:5'
         ];
     }

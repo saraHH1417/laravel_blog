@@ -18,8 +18,11 @@
                 <p>
                     {{ $post->content }}
                 </p>
-                <p> Post added {{ $post->created_at->diffForHumans() }}
-                    By {{ $post->user->name }}</p>
+                @updated(['name' => $post->user->name , 'date' => $post->created_at->diffForHumans()])
+                @endupdated
+
+                @tags(['tags' => $post->tags])
+                @endtags
                 @if($post->comments_count)
                     <p>{{ $post->comments_count }} Comments</p>
                 @else
@@ -52,25 +55,7 @@
             @endforelse
         </div>
         <div class="rightSidebar col-sm-4">
-            @card(['title' => "Most Commented" , 'elements' => collect($mostCommented) ,'elementFeature' => 'title',
-                    'needLink' => true])
-                @slot('subtitle')
-                    What people are currently talking about?
-                @endslot
-                @slot( 'noElementDetail' )
-                    Currently , There is no commented post.
-                @endslot
-            @endcard
-
-            @card(['marginTop' => 'mt-4' , 'title' => "Most Active Users" , 'subtitle' => "Which users have more posts?",
-                    'elements' => $mostActiveUsers , 'noElementDetail' => 'Currently , There is no commented post.'
-                    ,'elementFeature' => 'name'])
-            @endcard
-
-            @card(['marginTop' => 'mt-4' ,'title' => "Most Active Users In The Last Month" , 'subtitle' => "Which users have more posts?",
-            'elements' => $mostActiveUsers , 'noElementDetail' => 'Currently , There is no active user.'
-            ,'elementFeature' => 'name'])
-            @endcard
+            @include('posts._activity')
         </div>
     </div>
 @endsection
