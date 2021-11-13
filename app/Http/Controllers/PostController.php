@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 // The methods that laravel has in blogpost policy when we make it with artisan
 //[
@@ -75,6 +76,18 @@ class PostController extends Controller
         $validatedData['user_id'] = $request->user()->id;
         $blogPost = BlogPost::create($validatedData);
 
+        $hasFile = $request->hasFile('thumbnail');
+        if($hasFile){
+            $file = $request->file('thumbnail');
+            dump($file);
+            dump($file->getClientMimeType());
+            dump($file->getClientOriginalExtension());
+            $name1 = dump($file->store('thumbnails'));
+            $name2 = dump(Storage::disk('local')->putFile('thumbnails' , $file));
+            dump(storage::url($name1));
+            dump(storage::disk('public')->url($name2));
+        }
+        die;
         $request->session()->flash('success' , 'Blog post was created.');
 
         return redirect()->route('posts.show' , ['post' => $blogPost->id]);

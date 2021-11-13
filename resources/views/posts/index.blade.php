@@ -15,7 +15,7 @@
                         </del>
                     @endif
                 </h3>
-                <p>
+                <p style="overflow:auto">
                     {{ $post->content }}
                 </p>
                 @updated(['name' => $post->user->name , 'date' => $post->created_at->diffForHumans()])

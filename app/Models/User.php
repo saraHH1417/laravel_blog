@@ -43,6 +43,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getNameWithEmailAttribute() {
+        return "Welcome " . ucwords($this->name) . ', Your Email: '. $this->email;
+    }
+
     public function blogPosts()
     {
         return $this->hasMany(BlogPost::class);
