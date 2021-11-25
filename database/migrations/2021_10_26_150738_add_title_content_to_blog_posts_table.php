@@ -16,10 +16,10 @@ class AddTitleContentToBlogPostsTable extends Migration
         Schema::table('blog_posts', function (Blueprint $table) {
             if(env('DB_CONNECTION') === 'sqlite_testing'){
                 $table->string('title')->default('');
-                $table->text('content')->default('');
+                $table->text('contents')->default('');
             }else{
                 $table->string('title');
-                $table->text('content');
+                $table->text('contents');
             }
         });
 
@@ -34,7 +34,7 @@ class AddTitleContentToBlogPostsTable extends Migration
     public function down()
     {
         Schema::table('blog_posts', function (Blueprint $table) {
-            $table->dropColumn(['title' , 'content']);
+            $table->dropColumn(['title' , 'contents']);
         });
 
 //        Schema::rename('blogPosts' , 'blog_posts');

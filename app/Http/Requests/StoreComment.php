@@ -24,7 +24,7 @@ class StoreComment extends FormRequest
     public function rules()
     {
         return [
-            'content' => 'required|min:5'
+            'contents' => 'required|min:5'
         ];
     }
 }

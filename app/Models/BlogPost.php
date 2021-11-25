@@ -4,34 +4,36 @@ namespace App\Models;
 
 use App\Scopes\DeletedAdminScope;
 
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class BlogPost extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory , softDeletes , Taggable;
 
-    protected $fillable = ['title' , 'content' , 'user_id'];
+    protected $fillable = ['title' , 'contents' , 'user_id'];
 
+    public function image()
+    {
+        return $this->morphOne(Image::class , 'imageable');
+    }
     public function comments()
     {
-        return $this->hasMany(Comments::class)->latest();
+        return $this->morphMany(Comments::class , 'commentable')->latest();
     }
+
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class)->withTimestamps();
-    }
 
 //    public function scopeLatest(Builder $query) : Builder
 //    {
@@ -63,7 +65,14 @@ class BlogPost extends Model
         static::deleting(function(BlogPost $blogPost){
             Cache::tags('blog-post')->forget("blog-post-{$blogPost->id}");
             $blogPost->comments()->delete();
+            //because posts are soft deletable we don't write below line
+//            Storage::delete($blogPost->image->path);
+//            $blogPost->image()->delete();
         });
+
+//        static::deleted(function (BlogPost $blogPost){
+//
+//        });
 
         static::updating(function (BlogPost $blogPost){
             Cache::tags('blog-post')->forget("blog-post-{$blogPost->id}");

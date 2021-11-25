@@ -6,10 +6,6 @@
             <div class="form-group">
                 <textarea name="content" id="content" style="width: 100%" rows="5"></textarea>
             </div>
-            <div class="form-group">
-                <label for="file">File</label>
-                <input type="file" name="thumbnail" id="file" class="form-control-file">
-            </div>
             <button type="submit" class="btn btn-primary btn-block">Add Comment</button>
         </form>
         @errors @enderrors

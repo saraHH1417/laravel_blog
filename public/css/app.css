@@ -10007,3 +10007,8 @@ h3 {
 .badge-lg {
   font-size: 2rem;
 }
+
+.avatar {
+  width: 128px;
+  height: 128px;
+}

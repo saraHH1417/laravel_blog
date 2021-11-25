@@ -5,7 +5,7 @@
 
 <div class="form-group">
     <label for="content">Content</label>
-    <textarea name="content" id="content" cols="30" rows="10" class="form-control">{{ old('content' , $post->content ?? null) }}</textarea>
+    <textarea name="contents" id="content" cols="30" rows="10" class="form-control">{{ old('contents' , $post->contents ?? null) }}</textarea>
 </div>
 <div class="form-group">
     <label for="file">File</label>

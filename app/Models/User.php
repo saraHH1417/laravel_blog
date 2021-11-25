@@ -52,9 +52,21 @@ class User extends Authenticatable
         return $this->hasMany(BlogPost::class);
     }
 
+    public function image()
+    {
+        return $this->morphOne(Image::class , 'imageable');
+    }
+
+    // comments that created by the user
     public function comments()
     {
         return $this->hasMany(Comments::class);
+    }
+
+    // comments that other users have written for this user
+    public function commentsOn()
+    {
+        return $this->morphMany(Comments::class , 'commentable')->latest();
     }
     public function scopeWithMostBlogPosts(Builder $query)
     {
@@ -67,5 +79,13 @@ class User extends Authenticatable
                      $query->whereBetween(static::CREATED_AT , [now()->subMonths(1) , now()]);
         }])->has('blogPosts' , '>=' , '3')
            ->orderBy('blog_posts_count' , 'desc');
+    }
+
+    public function scopeThatHasCommentedOnPost(Builder $query, BlogPost $blogPost)
+    {
+         $query->whereHas('comments' , function ($query) use($blogPost){
+             return $query->where('commentable_id' , $blogPost->id)
+                 ->where('commentable_type' , BlogPost::class);
+         });
     }
 }

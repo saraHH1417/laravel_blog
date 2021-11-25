@@ -43,10 +43,13 @@ public function testPublishedPost()
 public function testShowOnePostWithComments()
 {
     $post = $this->createDummyPost();
+    $user = $this->user();
 
     Comments::factory()->count(3)->create(
-    ['blog_post_id'=> $post->id]
-    );
+    ['commentable_id'=> $post->id,
+     'commentable_type' => 'App\Models\BlogPost',
+     'user_id' => $user->id
+    ]);
     $response = $this->get('/posts');
     $response->assertSeeText('3 Comments');
 }
