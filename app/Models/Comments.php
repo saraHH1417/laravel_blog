@@ -16,6 +16,12 @@ class Comments extends Model
 
     protected $fillable =['contents' , 'user_id'];
 
+    protected $hidden = [
+        'deleted_at',
+        'commentable_type',
+        'commentable_id'
+    ];
+
     public function commentable()
     {
         return $this->morphTo();
@@ -48,12 +54,14 @@ class Comments extends Model
 
         //if we don't use a forget cache for blogpost , we may not see the updated post immediately in the
         // blogpost page. because of that we forget cache of our blogpost
-        static::creating(function (Comments $comment){
-            if($comment->commentable_type === BlogPost::class) {
-                Cache::tags('blog-posts')->forget("blog-post-{$comment->commentable_id}");
-                Cache::tags('blog-posts')->forget("blog-post-most-commented");
-            }
-        });
+
+        // Moved this to CommentsObserver
+//        static::creating(function (Comments $comment){
+//            if($comment->commentable_type === BlogPost::class) {
+//                Cache::tags('blog-posts')->forget("blog-post-{$comment->commentable_id}");
+//                Cache::tags('blog-posts')->forget("blog-post-most-commented");
+//            }
+//        });
     }
 
 }

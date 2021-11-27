@@ -17,7 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -27,7 +27,7 @@ class UserPolicy
      * @param  \App\Models\user  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, user $model)
+    public function view(User $user)
     {
         return true;
     }
@@ -40,7 +40,8 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return false;
+//        return false;
+        return true;
     }
 
     /**
@@ -52,7 +53,8 @@ class UserPolicy
      */
     public function update(User $user, user $model)
     {
-        return $user->id == $model->id;
+//        return $user->id == $model->id;
+        return true;
     }
 
     /**
@@ -64,7 +66,8 @@ class UserPolicy
      */
     public function delete(User $user, user $model)
     {
-        return false;
+//        return false;
+        return true;
     }
 
     /**
@@ -76,7 +79,8 @@ class UserPolicy
      */
     public function restore(User $user, user $model)
     {
-        return false;
+//        return false;
+        return true;
     }
 
     /**
@@ -88,6 +92,7 @@ class UserPolicy
      */
     public function forceDelete(User $user, user $model)
     {
-        return false;
+//        return false;
+        return true;
     }
 }

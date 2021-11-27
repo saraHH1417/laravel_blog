@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentPosted;
 use App\Http\Requests\StoreComment;
-use App\Jobs\NotifyUsersPostWasCreated;
+use App\Jobs\NotifyUsersPostWasCommented;
 use App\Jobs\ThrottledMail;
 use App\Mail\CommentPostedMarkdown;
 use App\Mail\CommnetPostedMail;
@@ -31,9 +32,10 @@ class PostCommentController extends Controller
 //            $when,
 //            new CommentPostedMarkdown($comment)
 //        );
-        ThrottledMail::dispatch(new CommentPostedMarkdown($comment) , $post->user);
-//        $request->session()->flash('status' , 'Comment was created.');
-        NotifyUsersPostWasCreated::dispatch($comment);
+
+        event(new CommentPosted($comment));
+
+
         return redirect()->back()->with('Comment created successfully');
     }
 }

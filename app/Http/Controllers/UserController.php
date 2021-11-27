@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
+use App\Facades\CounterFacade;
 use App\Http\Requests\UpdateUser;
 use App\Models\Image;
 use App\Models\user;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -23,10 +24,11 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['show']);
         // this method specifies related policy method for every route that has user at the begining of it
         // for example for route users.edit it applies update policy method for it
-        $this->authorizeResource(User::class, 'user');
+        $this->authorizeResource(User::class , 'user');
+
     }
 
 
@@ -36,9 +38,15 @@ class UserController extends Controller
      * @param  \App\Models\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(user $user)
+    public function show(User $user)
     {
-        return view('users.show' , ['user' => $user]);
+        $languages = User::LOCALES;
+//        $counter = resolve(Counter::class);
+        return view('users.show' , [
+            'user' => $user ,
+            'languages' => $languages,
+            'counter' => CounterFacade::increment("user-{$user->id}")
+        ]);
     }
 
     /**
@@ -49,7 +57,8 @@ class UserController extends Controller
      */
     public function edit(user $user)
     {
-        return view('users.edit' , ['user' => $user]);
+        $languages = User::LOCALES;
+        return view('users.edit' , ['user' => $user , 'languages' => $languages]);
     }
 
     /**
@@ -59,7 +68,7 @@ class UserController extends Controller
      * @param  \App\Models\user  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUser $request, user $user)
+    public function update(UpdateUser $request, User $user)
     {
         $user = User::findOrFail($user->id);
 
@@ -79,8 +88,10 @@ class UserController extends Controller
                 );
             }
         }
-
-        $user->update($validatedData);
+        $user->name = $request->get('name');
+        $user->locale = $request->get('locale');
+        $user->save();
+//        $user->update($validatedData);
         return redirect()->route('users.show' , ['user' => $user->id])->withStatus('User has updated successfully');
     }
 

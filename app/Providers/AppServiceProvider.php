@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\ActivityComposer;
+use App\Services\Counter;
+use App\Services\DummyCounter;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
@@ -39,5 +41,32 @@ class AppServiceProvider extends ServiceProvider
 
 //        view()->composer('*' , ActivityComposer::class);
         view()->composer(['posts.index' , 'posts.show'] , ActivityComposer::class);
+
+//        $this->app->bind(Counter::class , function($app){
+//            return new Counter(5);
+//        });
+
+        // $app->make('x') equals resolve('x')
+        $this->app->singleton(Counter::class , function($app){
+            return new Counter(
+                $app->make('Illuminate\Contracts\Cache\Factory'),
+                $app->make('Illuminate\Contracts\Session\Session'),
+                env('COUNTER_TIMEOUT'));
+        });
+
+        $this->app->bind(
+            'App\Contracts\CounterContract',
+            Counter::class
+        );
+
+//        $this->app->bind(
+//           'App\Contracts\CounterContract',
+//            DummyCounter::class
+//        );
+
+
+//        $this->app->when(Counter::class)
+//            ->needs('$timeout')
+//            ->give(env('COUNTER_TIMEOUT'));
     }
 }

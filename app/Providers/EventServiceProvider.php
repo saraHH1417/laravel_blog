@@ -2,6 +2,15 @@
 
 namespace App\Providers;
 
+use App\Events\BlogPostCreated;
+use App\Events\CommentPosted;
+use App\Listeners\CacheSubscriber;
+use App\Listeners\NotifyAdminWhenBlogPostCreated;
+use App\Listeners\NotifyUsersAboutComment;
+use App\Models\BlogPost;
+use App\Models\Comments;
+use App\Observers\BlogPostObserver;
+use App\Observers\CommentObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +27,16 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        CommentPosted::class => [
+            NotifyUsersAboutComment::class
+        ],
+        BlogPostCreated::class => [
+            NotifyAdminWhenBlogPostCreated::class
+        ]
+    ];
+
+    protected $subscribe = [
+        CacheSubscriber::class
     ];
 
     /**
@@ -27,6 +46,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        BlogPost::observe(BlogPostObserver::class);
+        Comments::observe(CommentObserver::class);
     }
 }

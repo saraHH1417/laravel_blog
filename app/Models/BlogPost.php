@@ -62,23 +62,25 @@ class BlogPost extends Model
             Cache::forget("users-most-active-last-month");
         });
 
-        static::deleting(function(BlogPost $blogPost){
-            Cache::tags('blog-post')->forget("blog-post-{$blogPost->id}");
-            $blogPost->comments()->delete();
-            //because posts are soft deletable we don't write below line
+//        Moved this to observer
+//        static::deleting(function(BlogPost $blogPost){
+//            Cache::tags('blog-post')->forget("blog-post-{$blogPost->id}");
+//            $blogPost->comments()->delete();
+//            //because posts are soft deletable we don't write below line
 //            Storage::delete($blogPost->image->path);
 //            $blogPost->image()->delete();
-        });
-
-//        static::deleted(function (BlogPost $blogPost){
-//
 //        });
 
-        static::updating(function (BlogPost $blogPost){
-            Cache::tags('blog-post')->forget("blog-post-{$blogPost->id}");
-        });
-        static::restoring(function (BlogPost $blogPost){
-            $blogPost->comments()->restore();
-        });
+
+
+//        Moved this to observer
+//        static::updating(function (BlogPost $blogPost){
+//            Cache::tags('blog-post')->forget("blog-post-{$blogPost->id}");
+//        });
+
+        //        Moved this to observer
+//        static::restoring(function (BlogPost $blogPost){
+//            $blogPost->comments()->restore();
+//        });
     }
 }

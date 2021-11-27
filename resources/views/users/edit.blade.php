@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <form action="{{ route('users.update' , ['user' => $user->id]) }}" method="post"
+    @errors
+    @enderrors
+    <form action="{{ route('users.update' , ['user' => $user]) }}" method="POST"
           enctype="multipart/form-data" class="form-horizontal">
         @csrf
         @method('PUT')
@@ -24,6 +26,16 @@
                     <input class="form-control" id="name" type="text" value="{{ $user->name ?? '' }}" name="name">
                 </div>
 
+                <div class="form-group">
+                    <label> {{__('Language:')}}</label>
+                    <select class="form-control" name="locale">
+                        @foreach($languages as $key=>$language)
+                            <option value=" {{ $key }}" {{ $user->locale == $key ? 'selected' : '' }}>
+                                {{ $language }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" value="Save Changes">
                 </div>
