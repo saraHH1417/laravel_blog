@@ -14,7 +14,11 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    {{ __('messages.logged_in') }}
+                     @lang('messages.logged_in')
+
+                    <h4>Using json : {{ __('Welcome to Laravel.') }}</h4>
+                    <h4>Using json: {{ __('hello :name' , ['name' => 'user']) }}</h4>
                 </div>
             </div>
         </div>

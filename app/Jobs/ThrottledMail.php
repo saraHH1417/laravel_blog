@@ -17,6 +17,12 @@ class ThrottledMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+//    // for specifying tries
+//    public $tries = 10;
+//    // when you have computation or sth else that takes long , you can use $timeout , it is in seconds.
+//    public $timeout = 30;
+
+
     /**
      * Create a new job instance.
      *
@@ -37,12 +43,15 @@ class ThrottledMail implements ShouldQueue
      */
     public function handle()
     {
-        Redis::throttle('mailtrap')->allow(10)->every(60)->then(function () {
-            // Job logic...
-            Mail::to($this->user)->send($this->mail);
-        }, function () {
-            // Could not obtain lock...
-            return $this->release(10);
-        });
+//        Redis::throttle('mailtrap')->allow(10)->every(60)->then(function () {
+//            // Job logic...
+//            Mail::to($this->user)->send($this->mail);
+//        }, function () {
+//            // Could not obtain lock...
+//            // release receives time parameter and  it specifies if job fails in what time repeat it again.
+//            return $this->release(10);
+//        });
+
+        Mail::to($this->user)->send($this->mail);
     }
 }

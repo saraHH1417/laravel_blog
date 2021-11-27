@@ -9,11 +9,17 @@
         </div>
         <div class="col-8">
             <h3>{{ $user->name }}</h3>
-            @if(\Illuminate\Support\Facades\Auth::user()->id == $user->id)
-                <a class="btn btn-info" href="{{ route('users.edit' , ['user' => $user->id]) }}">
-                    Edit Details
-                </a>
-            @endif
+            <h3>{{ __('Language') }}: {{ $languages[$user->locale] }}</h3>
+
+            <p>Currently viewed by {{ $counter }} other users</p>
+
+            @auth
+                @if(\Illuminate\Support\Facades\Auth::user()->id == $user->id)
+                    <a class="btn btn-info" href="{{ route('users.edit' , ['user' => $user->id]) }}">
+                        Edit Details
+                    </a>
+                @endif
+            @endauth
             <div id="comments-div">
                 @AddCommentForm(['route' => route('users.comments.store' , ['user' => $user->id])])
                 @endAddCommentForm

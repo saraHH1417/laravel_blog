@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
+use App\Events\BlogPostCreated;
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
 use App\Models\Image;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 // The methods that laravel has in blogpost policy when we make it with artisan
@@ -26,9 +24,11 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
 
-    public function __construct()
+    private $counter;
+    public function __construct(CounterContract $counter)
     {
        $this->middleware('auth')->only(['create' , 'store' , 'edit' , 'update' , 'destroy']);
+       $this->counter = $counter;
     }
     /**
      * Display a listing of the resource.
@@ -98,6 +98,8 @@ class PostController extends Controller
 //            dump(Storage::url($name1));
 //            dump(Storage::disk('local')->url($name2));
         }
+
+        event(new BlogPostCreated($blogPost));
         $request->session()->flash('success' , 'Blog post was created.');
 
         return redirect()->route('posts.show' , ['post' => $blogPost->id]);
@@ -121,39 +123,12 @@ class PostController extends Controller
             return BlogPost::with('comments' , 'tags' , 'user' , 'comments.user')->findOrFail($id);
         });
 
-        $sessionId = session()->getId();
-        $counterKey = "blog-posts-{$id}-counter";
-        $usersKey = "blog-posts-{$id}-users";
-
-        $users = Cache::tags(['blog-posts'])->get($usersKey , []);
-        $usersUpdate = [];
-        $difference =0;
-        $now = now();
-
-        foreach ($users as $session => $lastVisit){
-            if($now->diffInMinutes($lastVisit) >= 1){
-                $difference--;
-            }
-        }
-
-        if(!array_key_exists($sessionId , $users) or $now->diffInMinutes($users[$sessionId]) >=1 ){
-            $difference++;
-        }
-
-        $usersUpdate[$sessionId] = $now;
-        Cache::tags(['blog-posts'])->forever($usersKey , $usersUpdate);
-
-        if(!Cache::tags(['blog-posts'])->has($counterKey)){
-            Cache::tags(['blog-posts'])->forever($counterKey , 1);
-        }else{
-            Cache::tags(['blog-posts'])->increment($counterKey , $difference);
-        }
-
-        $counter = Cache::tags(['blog-posts'])->get($counterKey);
+        // we added dependency using dependency injection , so we don't need below line
+//        $counter = resolve(Counter::class);
 
         return view('posts.show' , [
             'post' => $blogPost,
-            'counter' => $counter
+            'counter' => $this->counter->increment("blog-post-{$id}" , ['blog-post'])
             ]);
     }
 
