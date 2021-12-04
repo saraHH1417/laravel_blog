@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\CommentPostedOnPostsWatched;
-use App\Models\Comments;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -23,7 +23,7 @@ class NotifyUsersPostWasCommented implements ShouldQueue
      * @return void
      */
     public $comment;
-    public function __construct(Comments $comment)
+    public function __construct(Comment $comment)
     {
         $this->comment = $comment;
     }

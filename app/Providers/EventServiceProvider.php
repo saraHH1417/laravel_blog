@@ -8,7 +8,7 @@ use App\Listeners\CacheSubscriber;
 use App\Listeners\NotifyAdminWhenBlogPostCreated;
 use App\Listeners\NotifyUsersAboutComment;
 use App\Models\BlogPost;
-use App\Models\Comments;
+use App\Models\Comment;
 use App\Observers\BlogPostObserver;
 use App\Observers\CommentObserver;
 use Illuminate\Auth\Events\Registered;
@@ -47,6 +47,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         BlogPost::observe(BlogPostObserver::class);
-        Comments::observe(CommentObserver::class);
+        Comment::observe(CommentObserver::class);
     }
 }

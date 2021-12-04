@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
 //                'remember_token' => Str::random(10),
 //            ]);
         $users_count = max((int) $this->command->ask('How many users would you like to create?', 20), 1);
-        \App\Models\User::factory()->saraName()->create();
+//        \App\Models\User::factory()->saraName()->create();
         \App\Models\User::factory($users_count)->create();
 
 

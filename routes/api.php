@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\V1\ApiPostCommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +17,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('v1')->name('api.v1.')->group(function (){
+    Route::get('/status', function (){
+        return response()->json(['status' => 'ok']);
+    })->name('status');
+
+    Route::apiResource('posts.comments' , ApiPostCommentController::class);
+});
+
+
+
+Route::fallback(function (){
+    return response()->json([
+        'message' => 'Not Found'
+    ], 404);
+})->name('api.fallback');

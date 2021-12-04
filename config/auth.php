@@ -40,6 +40,15 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            // default is api_token , if you want sth else use input_key
+            'input_key' => 'api_token',
+            // default is storage_token , if you want sth else use storage_key
+            'storage_key' => 'api_token'
+        ]
     ],
 
     /*

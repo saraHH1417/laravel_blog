@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Comments;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,7 +21,7 @@ class CommentPostedOnPostsWatched extends Mailable implements ShouldQueue
 
     public $comment;
     public $user;
-    public function __construct(Comments $comment, User $user)
+    public function __construct(Comment $comment, User $user)
     {
         $this->comment = $comment;
         $this->user = $user;

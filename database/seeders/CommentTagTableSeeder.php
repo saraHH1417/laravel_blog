@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comments;
+use App\Models\Comment;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 
@@ -24,7 +24,7 @@ class CommentTagTableSeeder extends Seeder
         $howManyMin = (int)$this->command->ask('Minimum tags on posts:' , 0);
         $howManyMax = min((int)$this->command->ask('Maximum tags on posts:' , $tagCount), $tagCount);
 
-        Comments::all()->each(function (Comments $blogPost) use($howManyMin, $howManyMax){
+        Comment::all()->each(function (Comment $blogPost) use($howManyMin, $howManyMax){
             $take = random_int($howManyMin, $howManyMax);
             $tags = Tag::inRandomOrder()->take($take)->get()->pluck('id');
             $blogPost->tags()->sync($tags);

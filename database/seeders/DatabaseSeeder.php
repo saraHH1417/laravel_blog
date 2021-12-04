@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\BlogPost;
-use App\Models\Comments;
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;

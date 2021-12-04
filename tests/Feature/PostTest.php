@@ -2,7 +2,7 @@
 namespace Tests\Feature;
 
 use App\Models\BlogPost;
-use App\Models\Comments;
+use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
@@ -33,7 +33,7 @@ public function testPublishedPost()
 
     //Assert
     $response->assertSeeText('New Title');
-    $response->assertSeeText('No Comments Yet!');
+    $response->assertSeeText('No Comment Yet!');
     $this->assertDatabaseHas('blog_posts', [
     'title' => 'New Title'
     ]);
@@ -45,13 +45,13 @@ public function testShowOnePostWithComments()
     $post = $this->createDummyPost();
     $user = $this->user();
 
-    Comments::factory()->count(3)->create(
+    Comment::factory()->count(3)->create(
     ['commentable_id'=> $post->id,
      'commentable_type' => 'App\Models\BlogPost',
      'user_id' => $user->id
     ]);
     $response = $this->get('/posts');
-    $response->assertSeeText('3 Comments');
+    $response->assertSeeText('3 Comment');
 }
 public function testSuccessSession()
 {

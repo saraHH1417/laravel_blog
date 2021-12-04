@@ -72,13 +72,13 @@ class User extends Authenticatable
     // comments that created by the user
     public function comments()
     {
-        return $this->hasMany(Comments::class);
+        return $this->hasMany(Comment::class);
     }
 
     // comments that other users have written for this user
     public function commentsOn()
     {
-        return $this->morphMany(Comments::class , 'commentable')->latest();
+        return $this->morphMany(Comment::class , 'commentable')->latest();
     }
     public function scopeWithMostBlogPosts(Builder $query)
     {

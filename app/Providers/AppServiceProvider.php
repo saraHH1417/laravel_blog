@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Http\ViewComposers\ActivityComposer;
 use App\Services\Counter;
 use App\Services\DummyCounter;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use phpDocumentor\Reflection\Types\Resource_;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        // when we request CommentResource it returns all results wrapped in $data array(or object, honestly I'm not sure)
+        // $data is used for special occasions like when we need pagination . So , We don't need $data here and can
+        // disable it with withoutWrapping function.
+        JsonResource::withoutWrapping();
+        // or CommentResource::withoutWrapping()
 //        Schema::defaultStringLength(191);
         Blade::aliasComponent('components.badge' , 'badge');
         Blade::aliasComponent('components.updated' , 'updated');

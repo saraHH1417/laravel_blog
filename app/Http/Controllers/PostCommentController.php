@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\CommentPosted;
 use App\Http\Requests\StoreComment;
+use App\Http\Resources\CommentResource;
 use App\Jobs\NotifyUsersPostWasCommented;
 use App\Jobs\ThrottledMail;
 use App\Mail\CommentPostedMarkdown;
@@ -17,6 +18,9 @@ class PostCommentController extends Controller
     {
         $this->middleware('auth')->only(['store']);
     }
+
+
+
     public function store(StoreComment $request , BlogPost $post)
     {
         $comment = $post->comments()->create([

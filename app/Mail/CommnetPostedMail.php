@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Comments;
+use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -19,7 +19,7 @@ class CommnetPostedMail extends Mailable
      *
      * @return void
      */
-    public function __construct(Comments $comment)
+    public function __construct(Comment $comment)
     {
         $this->comment = $comment;
     }
